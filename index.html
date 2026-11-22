@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Every country, one episode at a time. See which countries Country Prototypes already covered, what comes next and what viewers request most.">
+<meta property="og:title" content="Country Prototypes World">
+<meta property="og:description" content="Which country is next? See every aired episode and the most requested countries.">
+<meta name="theme-color" content="#05070D">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%8D%3C/text%3E%3C/svg%3E">
+<style>*,*::before,*::after{box-sizing:border-box}html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Country Prototypes World</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: night globe fills the left/top stage, a quiet mission panel sits beside it (stacks below on phones) */
+:root{
+  --space:#05070D;        /* page, deep space */
+  --ocean:#0A1222;        /* sea on the globe */
+  --land:#1A2333;         /* unlit land */
+  --border:#2A3548;       /* country borders */
+  --ink:#EEF1F6;          /* main text */
+  --muted:#8C96A8;        /* secondary text */
+  --panel:#0C111C;        /* panel surface */
+  --line:#1C2432;         /* hairlines */
+  --posted:#FF7A3D;       /* brand orange, aired episodes */
+  --next:#FFD23F;         /* coming up */
+  --wish:#5B7CFF;         /* requested by viewers */
+  --f-display:"Poppins",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+html,body{background:var(--space);color:var(--ink)}
+body{font-family:var(--f-body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:28px;align-items:start}
+header{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px}
+.brand{display:flex;flex-direction:column;gap:2px}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(28px,4.4vw,44px);line-height:1.05;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1 em{font-style:normal;color:var(--posted)}
+.cta{display:flex;flex-wrap:wrap;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;font-weight:600;font-size:14px;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:var(--panel);transition:border-color .15s,transform .15s}
+.btn:hover{border-color:var(--posted);transform:translateY(-1px)}
+.btn.pri{background:var(--posted);border-color:var(--posted);color:var(--space)}
+.btn:focus-visible,.legend button:focus-visible,canvas:focus-visible{outline:2px solid var(--next);outline-offset:3px}
+
+.stage{position:relative;min-width:0}
+canvas{display:block;width:100%;max-width:100%;aspect-ratio:1/1;cursor:grab;touch-action:none;border-radius:50%}
+canvas:active{cursor:grabbing}
+canvas.zoomed{border-radius:24px}
+.zoom{position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:6px}
+.zoom button{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:600 20px/1 var(--f-body);cursor:pointer;display:grid;place-items:center}
+.zoom button:hover{border-color:var(--posted)}
+.zoom button:focus-visible{outline:2px solid var(--next);outline-offset:2px}
+.zoom #zReset{font-size:13px}
+.row[role="button"]{cursor:pointer;border-radius:10px}
+.row[role="button"]:hover .nm{color:var(--posted)}
+.row[role="button"]:focus-visible{outline:2px solid var(--next);outline-offset:2px}
+.legend{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:10px}
+.legend button{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);font:500 13px var(--f-body);cursor:pointer}
+.legend button[aria-pressed="false"]{opacity:.45}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.d-posted{background:var(--posted);box-shadow:0 0 8px var(--posted)}
+.d-next{background:var(--next);box-shadow:0 0 8px var(--next)}
+.d-wish{background:var(--wish);box-shadow:0 0 8px var(--wish)}
+.tip{position:absolute;left:50%;bottom:64px;transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 14px;min-width:200px;max-width:calc(100% - 32px);text-align:center;pointer-events:none}
+.tip b{font-family:var(--f-display);font-weight:600;font-size:16px;display:block}
+.tip span{color:var(--muted);font-size:13px}
+.hint{color:var(--muted);font-size:13px;text-align:center;margin-top:6px}
+
+aside{display:flex;flex-direction:column;gap:22px;min-width:0}
+.meter{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px 20px}
+.meter .big{font-family:var(--f-display);font-weight:800;font-size:46px;line-height:1;font-variant-numeric:tabular-nums}
+.meter .big small{font-size:18px;color:var(--muted);font-weight:600}
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin:12px 0 8px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--posted),var(--next));border-radius:99px}
+.meter p{margin:0;color:var(--muted);font-size:13.5px}
+section h2{font-family:var(--f-display);font-weight:600;font-size:17px;margin:0 0 8px;display:flex;align-items:center;gap:8px}
+ol,ul{list-style:none;margin:0;padding:0}
+.row{display:grid;grid-template-columns:28px minmax(0,1fr) auto;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row .fl{font-size:20px;line-height:1}
+.row .nm{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .nm small{display:block;font-weight:400;color:var(--muted);font-size:12.5px}
+.row .val{font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px;text-align:right;white-space:nowrap}
+.row .val.when{color:var(--next);font-weight:600}
+.votes{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+.votes i{display:block;height:6px;border-radius:9px;background:var(--wish);min-width:4px}
+.empty{color:var(--muted);font-size:14px;padding:6px 0}
+.foot{color:var(--muted);font-size:12.5px}
+@media (max-width:820px){.wrap{grid-template-columns:minmax(0,1fr)}.tip{bottom:58px}}
+@media (prefers-reduced-motion:reduce){.btn{transition:none}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <span class="eyebrow">Country Prototypes · World tour</span>
+      <h1>Every country, <em>one episode</em> at a time.</h1>
+    </div>
+    <div class="cta">
+      <a class="btn pri" href="https://countryprototypes.myspreadshop.net" target="_blank" rel="noopener">Shop your country</a>
+      <a class="btn" href="https://www.tiktok.com/@minaut.scale" target="_blank" rel="noopener">Request yours on TikTok</a>
+    </div>
+  </header>
+
+  <div class="stage">
+    <canvas id="globe" width="900" height="900" tabindex="0" aria-label="Interactive globe. Orange countries already have an episode, yellow ones are coming next, blue ones were requested by viewers. Drag to turn it, use arrow keys to rotate."></canvas>
+    <div class="zoom" role="group" aria-label="Zoom">
+      <button type="button" id="zIn" aria-label="Zoom in">+</button>
+      <button type="button" id="zOut" aria-label="Zoom out">−</button>
+      <button type="button" id="zReset" aria-label="Show the whole globe" hidden>⟲</button>
+    </div>
+    <div class="tip" id="tip" hidden><b id="tipName"></b><span id="tipInfo"></span></div>
+    <div class="legend" role="group" aria-label="Show on the globe">
+      <button type="button" id="lg-posted" data-k="posted" aria-pressed="true"><span class="dot d-posted"></span>On air</button>
+      <button type="button" id="lg-next" data-k="next" aria-pressed="true"><span class="dot d-next"></span>Next up</button>
+      <button type="button" id="lg-wish" data-k="wish" aria-pressed="true"><span class="dot d-wish"></span>Requested</button>
+    </div>
+    <p class="hint">Drag to spin, pinch or scroll to zoom. Tap a country, or a name in the lists, to fly there.</p>
+  </div>
+
+  <aside>
+    <div class="meter">
+      <div class="big" id="count">–<small> / 195</small></div>
+      <div class="bar"><i id="barFill" style="width:0%"></i></div>
+      <p id="meterText">Loading the world tour…</p>
+    </div>
+    <section>
+      <h2><span class="dot d-next"></span>Next up</h2>
+      <ol id="nextList"><li class="empty">Loading…</li></ol>
+    </section>
+    <section>
+      <h2><span class="dot d-wish"></span>Most requested</h2>
+      <ol id="wishList"><li class="empty">Loading…</li></ol>
+    </section>
+    <p class="foot" id="foot">Requests are counted from TikTok comments, one vote per person. Countries that already aired are left out.</p>
+  </aside>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script>
+(async function(){
+  const css=getComputedStyle(document.documentElement);
+  const C=k=>css.getPropertyValue(k).trim();
+  const COL={ocean:C('--ocean'),land:C('--land'),border:C('--border'),posted:C('--posted'),next:C('--next'),wish:C('--wish'),space:C('--space')};
+  const show={posted:true,next:true,wish:true};
+
+  let world,data;
+  try{
+    [world,data]=await Promise.all([fetch('countries-110m.json').then(r=>r.json()),fetch('data.json',{cache:'no-store'}).then(r=>r.json())]);
+  }catch(e){document.getElementById('meterText').textContent='The map could not load. Reload the page to try again.';return}
+
+  const feats=topojson.feature(world,world.objects.countries).features;
+  feats.forEach(f=>{if(!f.id&&f.properties.name==='Kosovo')f.id='XK'});
+  const borders=topojson.mesh(world,world.objects.countries,(a,b)=>a!==b);
+  const land=topojson.merge(world,world.objects.countries.geometries);
+
+  // status per map id; posted beats next beats wish
+  const status={},info={};
+  const put=(id,st,txt,name)=>{if(!id)return;const rank={posted:3,next:2,wish:1};if(!status[id]||rank[st]>rank[status[id]]){status[id]=st;info[id]={txt,name}}};
+  const fmt=d=>new Date(d+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  data.posted.forEach(p=>put(p.id,'posted','Episode out · '+p.ch,p.n));
+  data.next.forEach(p=>put(p.id,'next','Coming '+fmt(p.d)+' · '+p.ch,p.n));
+  data.requested.forEach(p=>put(p.id,'wish',p.v+' viewer request'+(p.v===1?'':'s'),p.n));
+  const dots=(data.dots||[]).map(d=>({...d,st:null}));
+  dots.forEach(d=>{d.st=status[d.id]||null});
+
+  // panel
+  const total=data.total||195,done=data.postedCount;
+  document.getElementById('count').firstChild.textContent=done;
+  document.getElementById('count').querySelector('small').textContent=' / '+total;
+  document.getElementById('barFill').style.width=Math.min(100,done/total*100).toFixed(1)+'%';
+  document.getElementById('meterText').textContent=`${done} countries have their own prototype. ${data.next.length} more are already in production, about ${Math.max(0,total-done)} still to go.`;
+  const li=(fl,nm,sub,val,cls)=>{const r=document.createElement('li');r.className='row';r.innerHTML=`<span class="fl"></span><span class="nm"></span><span class="val ${cls||''}"></span>`;r.children[0].textContent=fl;r.children[1].textContent=nm;if(sub){const s=document.createElement('small');s.textContent=sub;r.children[1].append(s)}if(val instanceof Node)r.children[2].append(val);else r.children[2].textContent=val;return r};
+  const nl=document.getElementById('nextList');nl.textContent='';
+  if(!data.next.length)nl.innerHTML='<li class="empty">New episodes are being planned.</li>';
+  data.next.slice(0,8).forEach(p=>{const r=li(p.f,p.n,'Meet '+p.ch,fmt(p.d),'when');r.dataset.id=p.id;nl.append(r)});
+  const wl=document.getElementById('wishList');wl.textContent='';
+  const top=data.requested.slice(0,10),maxV=Math.max(1,...top.map(x=>x.v));
+  if(!top.length)wl.innerHTML='<li class="empty">No open requests right now. Comment your country on TikTok.</li>';
+  top.forEach(p=>{const v=document.createElement('span');v.className='votes';const bar=document.createElement('i');bar.style.width=Math.round(8+52*p.v/maxV)+'px';v.append(bar,document.createTextNode(p.v));const r=li(p.f,p.n,null,v);r.dataset.id=p.id;wl.append(r)});
+  document.getElementById('foot').textContent=`Requests are counted from TikTok comments, one vote per person. Countries that already aired or are scheduled are left out. Updated ${fmt(data.updated)}.`;
+
+  // globe
+  const cv=document.getElementById('globe'),ctx=cv.getContext('2d');
+  const dpr=Math.min(2,window.devicePixelRatio||1);let S=900;
+  const proj=d3.geoOrthographic().clipAngle(90).precision(.4);
+  const path=d3.geoPath(proj,ctx);
+  let rot=[-12,-28,0],zoom=1;
+  const ZMIN=1,ZMAX=12;
+  function setZoom(z){zoom=Math.max(ZMIN,Math.min(ZMAX,z));proj.scale((S/2-14)*zoom);cv.classList.toggle('zoomed',zoom>1.02);document.getElementById('zReset').hidden=zoom<=1.02}
+  function size(){const w=cv.getBoundingClientRect().width||600;S=Math.round(w);cv.width=S*dpr;cv.height=S*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);proj.translate([S/2,S/2]);setZoom(zoom)}
+  size();
+
+  // city lights: random points on land, seeded so they stay put
+  let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+  const lights=[];
+  (function sample(){let tries=0;while(lights.length<1400&&tries<500){tries++;const lon=rnd()*360-180,lat=Math.asin(rnd()*2-1)*180/Math.PI;if(lat<-58)continue;if(d3.geoContains(land,[lon,lat]))lights.push([lon,lat,.25+rnd()*.75])}if(lights.length<1400)setTimeout(sample,0)})();
+
+  const sphere={type:'Sphere'};
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function draw(){
+    const r=proj.scale(),cx=S/2,cy=S/2;
+    ctx.clearRect(0,0,S,S);
+    // atmosphere
+    const g=ctx.createRadialGradient(cx,cy,r*.9,cx,cy,r*1.08);g.addColorStop(0,'rgba(91,124,255,.28)');g.addColorStop(1,'rgba(91,124,255,0)');
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,r*1.08,0,7);ctx.fill();
+    // ocean with light falloff
+    const og=ctx.createRadialGradient(cx-r*.35,cy-r*.4,r*.1,cx,cy,r);og.addColorStop(0,'#13213A');og.addColorStop(1,COL.ocean);
+    ctx.beginPath();path(sphere);ctx.fillStyle=og;ctx.fill();
+    // land
+    ctx.beginPath();path(land);ctx.fillStyle=COL.land;ctx.fill();
+    // city lights
+    const c=proj.rotate(),center=[-c[0],-c[1]];
+    ctx.fillStyle='rgba(255,214,150,.55)';
+    for(const p of lights){if(d3.geoDistance(p,center)>1.5)continue;const q=proj(p);ctx.globalAlpha=p[2]*.7;ctx.fillRect(q[0],q[1],1.2,1.2)}
+    ctx.globalAlpha=1;
+    // status fills with glow
+    for(const st of ['wish','next','posted']){if(!show[st])continue;const col=COL[st];
+      ctx.save();ctx.shadowColor=col;ctx.shadowBlur=st==='posted'?18:12;ctx.fillStyle=col;ctx.globalAlpha=st==='posted'?.92:.85;
+      ctx.beginPath();for(const f of feats){if(status[f.id]===st&&!(f.id===sel))path(f)}ctx.fill();ctx.restore()}
+    // borders
+    ctx.beginPath();path(borders);ctx.strokeStyle='rgba(5,7,13,.75)';ctx.lineWidth=.7;ctx.stroke();
+    // selected
+    if(sel){const f=feats.find(x=>x.id===sel);if(f){ctx.save();const st=status[sel];const col=st?COL[st]:'#ffffff';ctx.shadowColor=col;ctx.shadowBlur=26;ctx.fillStyle=st?col:'rgba(255,255,255,.18)';ctx.beginPath();path(f);ctx.fill();ctx.lineWidth=1.6;ctx.strokeStyle='#ffffff';ctx.stroke();ctx.restore()}}
+    // small countries as glowing pins
+    for(const d of dots){if(!d.st||!show[d.st])continue;if(d3.geoDistance([d.lon,d.lat],center)>1.5)continue;const q=proj([d.lon,d.lat]);ctx.save();ctx.shadowColor=COL[d.st];ctx.shadowBlur=12;ctx.fillStyle=COL[d.st];ctx.beginPath();ctx.arc(q[0],q[1],d.id===sel?5:3.4,0,7);ctx.fill();ctx.restore()}
+    // rim shading
+    const rg=ctx.createRadialGradient(cx,cy,r*.6,cx,cy,r);rg.addColorStop(0,'rgba(0,0,0,0)');rg.addColorStop(1,'rgba(0,0,0,.45)');
+    ctx.beginPath();path(sphere);ctx.fillStyle=rg;ctx.fill();
+  }
+
+  let sel=null,dragging=false,idleAt=0,last=performance.now();
+  proj.rotate(rot);
+  let fly=null;
+  function tick(t){const dt=Math.min(64,t-last);last=t;
+    if(fly){const p=Math.min(1,(t-fly.t0)/fly.ms),e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;rot=fly.r(e);setZoom(fly.z(e));proj.rotate(rot);if(p>=1)fly=null}
+    else if(!dragging&&!reduce&&t>idleAt&&zoom<1.3){rot[0]+=dt*.006;proj.rotate(rot)}
+    draw();requestAnimationFrame(tick)}
+  requestAnimationFrame(tick);
+  function flyTo(lonlat,z){const target=[-lonlat[0],-lonlat[1],0];let dl=target[0]-rot[0];dl=((dl+540)%360)-180;fly={t0:performance.now(),ms:reduce?1:900,r:d3.interpolate(rot.slice(),[rot[0]+dl,target[1],0]),z:d3.interpolate(zoom,z)};idleAt=performance.now()+8000}
+
+  // drag, pinch, wheel
+  const pts=new Map();let start=null,moved=0,pinch=null;
+  cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);pts.set(e.pointerId,{x:e.clientX,y:e.clientY});fly=null;
+    if(pts.size===2){const [a,b]=[...pts.values()];pinch={d:Math.hypot(a.x-b.x,a.y-b.y)||1,z:zoom};moved=99;return}
+    dragging=true;moved=0;start={x:e.clientX,y:e.clientY,r:rot.slice()}});
+  cv.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId))return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pinch&&pts.size>=2){const [a,b]=[...pts.values()];setZoom(pinch.z*Math.hypot(a.x-b.x,a.y-b.y)/pinch.d);return}
+    if(!dragging)return;const k=75/proj.scale()*1.6;const dx=e.clientX-start.x,dy=e.clientY-start.y;moved=Math.max(moved,Math.abs(dx)+Math.abs(dy));rot=[start.r[0]+dx*k*.9,Math.max(-85,Math.min(85,start.r[1]-dy*k*.9)),0];proj.rotate(rot)});
+  const end=e=>{pts.delete(e.pointerId);idleAt=performance.now()+4000;
+    if(pinch){if(pts.size<2)pinch=null;if(pts.size===1){const p=[...pts.values()][0];start={x:p.x,y:p.y,r:rot.slice()};dragging=true}else dragging=false;return}
+    if(!dragging)return;dragging=false;if(moved<6)pick(e)};
+  cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',e=>{pts.delete(e.pointerId);pinch=null;dragging=false});
+  cv.addEventListener('wheel',e=>{e.preventDefault();fly=null;setZoom(zoom*Math.exp(-e.deltaY*.0018));idleAt=performance.now()+6000},{passive:false});
+  cv.addEventListener('dblclick',e=>{const b=cv.getBoundingClientRect();const ll=proj.invert([(e.clientX-b.left)*(S/b.width),(e.clientY-b.top)*(S/b.height)]);if(ll)flyTo(ll,Math.min(ZMAX,zoom*2.2))});
+  cv.addEventListener('keydown',e=>{if(e.key==='+'||e.key==='='){setZoom(zoom*1.4);return}if(e.key==='-'){setZoom(zoom/1.4);return}const s={ArrowLeft:[-8,0],ArrowRight:[8,0],ArrowUp:[0,-6],ArrowDown:[0,6]}[e.key];if(!s)return;e.preventDefault();rot=[rot[0]-s[0]/zoom,Math.max(-85,Math.min(85,rot[1]-s[1]/zoom)),0];proj.rotate(rot);idleAt=performance.now()+4000});
+  document.getElementById('zIn').onclick=()=>{fly=null;flyTo([-rot[0],-rot[1]],Math.min(ZMAX,zoom*1.8))};
+  document.getElementById('zOut').onclick=()=>{fly=null;flyTo([-rot[0],-rot[1]],Math.max(ZMIN,zoom/1.8))};
+  document.getElementById('zReset').onclick=()=>{flyTo([-rot[0],-20],1);sel=null;tip.hidden=true};
+  addEventListener('resize',()=>{size()});
+
+  // tap a name in the lists to fly there
+  const where=id=>{const d=dots.find(x=>x.id===id);if(d)return{ll:[d.lon,d.lat],z:7};const f=feats.find(x=>x.id===id);if(!f)return null;const a=d3.geoArea(f);return{ll:d3.geoCentroid(f),z:a>.05?1.8:a>.01?2.8:a>.002?4.5:7}};
+  document.querySelectorAll('#nextList .row,#wishList .row').forEach(r=>{const id=r.dataset.id;if(!id)return;r.tabIndex=0;r.setAttribute('role','button');
+    const go=()=>{const w=where(id);if(!w)return;flyTo(w.ll,w.z);sel=id;const i=info[id];tn.textContent=(i&&i.name)||r.querySelector('.nm').firstChild.textContent;ti.textContent=i?i.txt:'';tip.hidden=false;document.querySelector('.stage').scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'})};
+    r.addEventListener('click',go);r.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
+
+  const tip=document.getElementById('tip'),tn=document.getElementById('tipName'),ti=document.getElementById('tipInfo');
+  const NAMES={};data.posted.concat(data.next,data.requested).forEach(p=>{NAMES[p.id]=NAMES[p.id]||p.n});
+  function pick(e){const b=cv.getBoundingClientRect();const pt=[(e.clientX-b.left)*(S/b.width),(e.clientY-b.top)*(S/b.height)];const ll=proj.invert(pt);
+    if(!ll||d3.geoDistance(ll,[-rot[0],-rot[1]])>1.57){sel=null;tip.hidden=true;return}
+    // small-country pins first
+    let hit=null;for(const d of dots){if(!d.st)continue;const q=proj([d.lon,d.lat]);if(Math.hypot(q[0]-pt[0],q[1]-pt[1])<12&&d3.geoDistance([d.lon,d.lat],[-rot[0],-rot[1]])<1.5){hit={id:d.id,name:d.n}}}
+    if(!hit){const f=feats.find(f=>d3.geoContains(f,ll));if(f)hit={id:f.id,name:NAMES[f.id]||f.properties.name}}
+    if(!hit){sel=null;tip.hidden=true;return}
+    sel=hit.id;const i=info[hit.id];tn.textContent=(i&&i.name)||hit.name;ti.textContent=i?i.txt:'Not requested yet. Be the first on TikTok!';tip.hidden=false;idleAt=performance.now()+6000}
+
+  document.querySelectorAll('.legend button').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.k;show[k]=!show[k];b.setAttribute('aria-pressed',show[k])}));
+})();
+</script>
+
+</body>
+</html>
