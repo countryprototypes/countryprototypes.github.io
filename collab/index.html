@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Country Prototypes Passport</title>
+<meta name="description" content="Brand deals and collaborations with Country Prototypes, the animated series that turns every country into a lovable prototype.">
+<meta property="og:title" content="Country Prototypes – Brand deals & collabs">
+<meta property="og:description" content="Animated country series. Sponsored episodes, product cameos and merch collabs.">
+<meta name="theme-color" content="#14233F">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A4%9D%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap">
+<style>
+/* Layout: a passport booklet – navy cover band, then the cream data page, visa stamps, and the contact desk */
+:root{
+  --cover:#14233F;      /* passport cover navy */
+  --gold:#D9B45A;       /* embossed foil */
+  --paper:#F6F1E6;      /* data page paper */
+  --paper-2:#EDE5D3;    /* guilloche tint */
+  --ink:#1A1A1A;
+  --muted:#6B6457;
+  --orange:#E8622C;     /* brand */
+  --stamp-blue:#1F4E9A;
+  --stamp-green:#2E7D4F;
+  --stamp-red:#C6363C;
+  --f-display:"Poppins",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"Inter",ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --f-mono:"Space Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--cover);color:var(--ink);overscroll-behavior:none}
+html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{font-family:var(--f-body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:560px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+
+/* cover */
+.cover{text-align:center;color:var(--gold);padding:10px 0 4px}
+.cover .crest{width:84px;height:84px;margin:0 auto 10px;border:3px solid var(--gold);border-radius:50%;display:grid;place-items:center;font:800 26px var(--f-display);letter-spacing:1px}
+.cover h1{margin:0;font:800 clamp(24px,7vw,32px)/1.1 var(--f-display);letter-spacing:.16em;text-transform:uppercase}
+.cover p{margin:6px 0 0;font:600 12px var(--f-display);letter-spacing:.32em;text-transform:uppercase;opacity:.85}
+
+/* data page */
+.page{background:var(--paper);border-radius:16px;overflow:hidden;position:relative;
+  background-image:repeating-radial-gradient(circle at 80% 20%,transparent 0 9px,rgba(31,78,154,.05) 9px 10px),repeating-linear-gradient(120deg,transparent 0 14px,rgba(232,98,44,.04) 14px 15px)}
+.page-h{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--paper-2);font:700 11px var(--f-mono);letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+.bio{display:grid;grid-template-columns:118px minmax(0,1fr);gap:16px;padding:16px}
+.photo{width:118px;height:148px;border-radius:8px;overflow:hidden;background:#F2C58A;border:1px solid var(--paper-2)}
+.photo img{width:100%;height:100%;object-fit:cover;filter:saturate(.95)}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;min-width:0}
+.f{min-width:0}
+.f span{display:block;font:700 10px var(--f-mono);letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+.f b{display:block;font:600 15px/1.25 var(--f-body);overflow-wrap:anywhere}
+.f.wide{grid-column:1/-1}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px 16px}
+.st{background:rgba(255,255,255,.65);border:1px solid var(--paper-2);border-radius:10px;padding:10px 6px;text-align:center}
+.st b{display:block;font:800 20px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.st span{font:700 9.5px var(--f-mono);letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+.mrz{background:rgba(255,255,255,.55);border-top:1px solid var(--paper-2);padding:12px 16px;font:400 clamp(10px,3.1vw,14px)/1.5 var(--f-mono);letter-spacing:.08em;word-break:break-all;color:#2a2a2a}
+
+/* visas */
+.sect{background:var(--paper);border-radius:16px;padding:16px}
+.sect h2{margin:0 0 4px;font:800 18px var(--f-display)}
+.sect .lead{margin:0 0 14px;color:var(--muted);font-size:14.5px}
+.visas{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.visa{border:3px solid currentColor;border-radius:12px;padding:12px 10px;text-align:center;transform:rotate(var(--r,0deg));background:rgba(255,255,255,.4)}
+.visa i{display:block;font:700 10px var(--f-mono);letter-spacing:.14em;font-style:normal;opacity:.85}
+.visa b{display:block;font:800 15px/1.2 var(--f-display);margin:4px 0}
+.visa small{display:block;color:var(--ink);font-size:12.5px;line-height:1.35;opacity:.85}
+.v1{color:var(--stamp-blue);--r:-2deg}.v2{color:var(--stamp-red);--r:1.5deg}.v3{color:var(--stamp-green);--r:1deg}.v4{color:var(--orange);--r:-1.5deg}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:6px 11px;border-radius:999px;background:rgba(255,255,255,.7);border:1px solid var(--paper-2);font-size:13.5px}
+.no{margin-top:12px;font-size:13px;color:var(--muted)}
+
+/* contact */
+.desk{background:var(--paper);border-radius:16px;padding:18px 16px;text-align:center}
+.desk h2{margin:0;font:800 20px var(--f-display)}
+.desk p{margin:6px 0 14px;color:var(--muted);font-size:14.5px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:15px 18px;border-radius:14px;border:0;font:700 16px var(--f-display);text-decoration:none;cursor:pointer}
+.btn.pri{background:var(--orange);color:#fff}
+.btn.sec{background:transparent;color:var(--ink);border:2px solid var(--ink);margin-top:10px}
+.btn:focus-visible{outline:3px solid var(--stamp-blue);outline-offset:3px}
+.addr{margin-top:12px;font:700 15px var(--f-mono);user-select:all;-webkit-user-select:all;overflow-wrap:anywhere}
+.hint{margin-top:8px;font-size:12.5px;color:var(--muted)}
+.back{color:var(--gold);text-align:center;font-size:14px}
+.back a{color:var(--gold)}
+@media (max-width:420px){.bio{grid-template-columns:92px minmax(0,1fr);gap:12px}.photo{width:92px;height:118px}.stats{grid-template-columns:repeat(2,1fr)}}
+@media (prefers-reduced-motion:reduce){.visa{transform:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="cover">
+    <div class="crest">CP</div>
+    <h1>Passport</h1>
+    <p>Country Prototypes · Brand deals</p>
+  </header>
+
+  <section class="page" aria-label="Channel data page">
+    <div class="page-h"><span>Type P · Animated series</span><span id="since">Issued 31 OCT 2026</span></div>
+    <div class="bio">
+      <div class="photo"><img src="avatar.png" alt="Country Prototypes channel mascot"></div>
+      <div class="fields">
+        <div class="f wide"><span>Name</span><b>Country Prototypes</b></div>
+        <div class="f"><span>Nationality</span><b>Every country</b></div>
+        <div class="f"><span>Platform</span><b>TikTok</b></div>
+        <div class="f"><span>Episodes</span><b id="eps">66+</b></div>
+        <div class="f"><span>New videos</span><b id="pd">3 per day</b></div>
+        <div class="f wide"><span>Top audience</span><b id="aud">United Kingdom, then Europe and the US</b></div>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="st"><b id="fol">33.5K</b><span>Followers</span></div>
+      <div class="st"><b id="vie">15.5M</b><span>Views</span></div>
+      <div class="st"><b id="lik">1.6M</b><span>Likes</span></div>
+      <div class="st"><b>195</b><span>Countries goal</span></div>
+    </div>
+    <div class="mrz" aria-hidden="true">P&lt;CPT&lt;COUNTRY&lt;&lt;PROTOTYPES&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>ONE&lt;GUY&lt;EVERY&lt;COUNTRY&lt;&lt;&lt;66&lt;EPISODES&lt;&lt;&lt;</div>
+  </section>
+
+  <section class="sect">
+    <h2>Visas we issue</h2>
+    <p class="lead">One character, one country, under a minute. Your brand travels with him.</p>
+    <div class="visas">
+      <div class="visa v1"><i>VISA · 01</i><b>Sponsored episode</b><small>Your brand woven into a country episode, naturally and on-theme.</small></div>
+      <div class="visa v2"><i>VISA · 02</i><b>Product cameo</b><small>The prototype uses, wears or loves your product.</small></div>
+      <div class="visa v3"><i>VISA · 03</i><b>Merch collab</b><small>A joint design for our country shirt shop.</small></div>
+      <div class="visa v4"><i>VISA · 04</i><b>Country takeover</b><small>A mini-series for the markets you care about.</small></div>
+    </div>
+  </section>
+
+  <section class="sect">
+    <h2>Great fit for</h2>
+    <p class="lead">Brands that connect people and countries.</p>
+    <div class="chips">
+      <span class="chip">Money transfer</span><span class="chip">Language learning</span><span class="chip">Travel and eSIM</span><span class="chip">International food</span><span class="chip">Ancestry and DNA</span><span class="chip">Geography games</span><span class="chip">Apparel</span>
+    </div>
+    <p class="no">We keep it friendly: no gambling, crypto, alcohol or political topics.</p>
+  </section>
+
+  <section class="desk" id="contact">
+    <h2>Get your stamp</h2>
+    <p>Tell us about your brand and the countries you want to reach. We read every message.</p>
+    <a class="btn pri" id="mail" href="mailto:countryprototypes@outlook.com?subject=Brand%20collab%20with%20Country%20Prototypes&body=Hi%20Country%20Prototypes%20team%2C%0A%0ABrand%3A%20%0AWebsite%3A%20%0ACountries%20%2F%20markets%3A%20%0AIdea%3A%20%0A%0ABest%2C%20">✉️&nbsp; Email us</a>
+    <button class="btn sec" id="copy" type="button">Copy email address</button>
+    <div class="addr" id="addr">countryprototypes@outlook.com</div>
+    <div class="hint" id="hint">If the email button does nothing in the TikTok browser, copy the address or open this page in your phone's browser.</div>
+  </section>
+
+  <p class="back"><a href="../">See the world map</a> · <a href="https://countryprototypes.myspreadshop.net" target="_blank" rel="noopener">Shop</a></p>
+</div>
+<script>
+(async()=>{try{const s=await fetch('stats.json',{cache:'no-store'}).then(r=>r.json());
+  const set=(id,v)=>{if(v)document.getElementById(id).textContent=v};
+  set('fol',s.followers);set('vie',s.views);set('lik',s.likes);set('eps',s.episodes&&s.episodes+'+');set('pd',s.perDay&&s.perDay+' per day');
+  if(s.since)document.getElementById('since').textContent='Issued '+s.since;
+}catch(e){}})();
+const btn=document.getElementById('copy'),addr='countryprototypes@outlook.com';
+btn.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(addr);btn.textContent='Copied ✓'}catch(e){const r=document.createRange();r.selectNodeContents(document.getElementById('addr'));const sel=getSelection();sel.removeAllRanges();sel.addRange(r);btn.textContent='Address selected – tap Copy'}setTimeout(()=>btn.textContent='Copy email address',2500)});
+</script>
+</body>
+</html>
