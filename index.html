@@ -156,6 +156,8 @@ ol,ul{list-style:none;margin:0;padding:0}
   try{
     [world,data]=await Promise.all([fetch('countries-110m.json').then(r=>r.json()),fetch('data.json',{cache:'no-store'}).then(r=>r.json())]);
   }catch(e){document.getElementById('meterText').textContent='The map could not load. Reload the page to try again.';return}
+  // Keep "Next up" fresh between data updates: hide planned episodes whose date has already passed
+  {const t=new Date(),today=t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');data.next=data.next.filter(p=>!p.d||p.d>=today)}
 
   const feats=topojson.feature(world,world.objects.countries).features;
   feats.forEach(f=>{if(!f.id&&f.properties.name==='Kosovo')f.id='XK'});
